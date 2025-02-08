@@ -22,7 +22,7 @@
 ## 项目运行
 
 ```bash
-sudo apt install redis
+sudo apt install redis gcc g++ cmake
 cargo run
 ``` 
 
