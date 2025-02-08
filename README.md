@@ -17,11 +17,12 @@
 - `tokio`：用于异步编程。
 - `serde`：用于序列化和反序列化。
 - `sqlite`：用于存储验证码信息。
-- `rust-sqlite3`：用于sqlite的rust绑定。
+- `redis`：用于sqlite的rust绑定。
 
 ## 项目运行
 
 ```bash
+sudo apt install redis
 cargo run
 ``` 
 
