@@ -1,8 +1,11 @@
+mod config;
+
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use redis::Client;
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 use log::{info, error, warn};
+use crate::config::Settings;
 
 // 定义消息结构体
 #[derive(Serialize, Deserialize)]
@@ -92,10 +95,21 @@ async fn main() -> std::io::Result<()> {
     // 初始化日志
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
     
+    info!("正在加载配置...");
+    
+    // 加载配置
+    let settings = match Settings::new() {
+        Ok(settings) => settings,
+        Err(e) => {
+            error!("配置加载失败: {}", e);
+            return Ok(());
+        }
+    };
+    
     info!("正在启动应用...");
     
     // 创建 Redis 客户端
-    let client = match Client::open("redis://127.0.0.1:6379") {
+    let client = match Client::open(settings.redis.url) {
         Ok(client) => {
             info!("Redis客户端创建成功");
             client
@@ -111,7 +125,8 @@ async fn main() -> std::io::Result<()> {
         redis_client: Mutex::new(client),
     });
 
-    info!("开始监听 127.0.0.1:8081");
+    let bind_address = format!("{}:{}", settings.server.host, settings.server.port);
+    info!("开始监听 {}", bind_address);
     
     HttpServer::new(move || {
         App::new()
@@ -119,7 +134,7 @@ async fn main() -> std::io::Result<()> {
             .route("/api/message", web::post().to(post_message))
             .route("/api/message", web::get().to(get_message))
     })
-    .bind("127.0.0.1:8081")?
+    .bind(&bind_address)?
     .run()
     .await
 }
