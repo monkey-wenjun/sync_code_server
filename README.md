@@ -4,8 +4,9 @@
 
 一个基于rust的验证码同步服务，用于Android客户端的验证码同步到指定的设备上。服务端暴露了一个接口
 
-POST /api/message  客户端获取最新的验证码{"message":code} 存储到服务端的redis 中
-GET /api/message  客户端Chrome 扩展点获取最新的验证码加密数据并解密
+- POST /api/message  客户端获取最新的验证码{"message":code} 存储到服务端的redis 中
+
+- GET /api/message  客户端Chrome 扩展点获取最新的验证码加密数据并解密
 
 ## 项目结构
 
