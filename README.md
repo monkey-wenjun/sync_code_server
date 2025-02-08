@@ -79,8 +79,5 @@ WantedBy=multi-user.target
 ```
 
 
-
-
-
-
-
+## 客户端
+请在 https://github.com/monkey-wenjun/auto_sync_captcha/releases/tag/v1.0 下载客户端
